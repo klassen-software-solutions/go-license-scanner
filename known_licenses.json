@@ -1,0 +1,533 @@
+{
+    "acceptable-license-types": [
+        "MIT License",
+        "Apache License 2.0",
+        "ISC License",
+        "BSD 3-Clause \"New\" or \"Revised\" License",
+        "BSD 2-Clause \"Simplified\" License",
+        "Mozilla Public License 2.0",
+        "Manually Accepted",
+        "Go License",
+        "GoPkg License"
+    ],
+    "resolved-licenses": [
+    {
+        "key": "github.com/Azure/go-ansiterm",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T15:49:02-0600"
+    },
+    {
+        "key": "github.com/Flaque/filet",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T15:49:03-0600"
+    },
+    {
+        "key": "github.com/Microsoft/go-winio",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T15:49:04-0600"
+    },
+    {
+        "key": "github.com/cenkalti/backoff",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T15:49:05-0600"
+    },
+    {
+        "key": "github.com/client9/misspell",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T15:49:05-0600"
+    },
+    {
+        "key": "github.com/containerd/continuity",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T15:56:33-0600"
+    },
+    {
+        "key": "github.com/coreos/go-semver",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T15:56:34-0600"
+    },
+    {
+        "key": "github.com/docker/distribution",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T15:56:35-0600"
+    },
+    {
+        "key": "github.com/davecgh/go-spew",
+        "license-abbreviation": "ISC License",
+        "license-url": "https://api.github.com/licenses/isc",
+        "time": "2019-10-31T16:00:21-0600"
+    },
+    {
+        "key": "github.com/docker/docker",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:00:22-0600"
+    },
+    {
+        "key": "github.com/docker/go-connections",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:00:23-0600"
+    },
+    {
+        "key": "github.com/docker/go-units",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:01:55-0600"
+    },
+    {
+        "key": "github.com/golang/glog",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:02:00-0600"
+    },
+    {
+        "key": "github.com/golang/mock",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:02:00-0600"
+    },
+    {
+        "key": "github.com/kisielk/gotool",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:02:09-0600"
+    },
+    {
+        "key": "github.com/konsorten/go-windows-terminal-sequences",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:02:10-0600"
+    },
+    {
+        "key": "github.com/kr/pretty",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:02:11-0600"
+    },
+    {
+        "key": "github.com/fsnotify/fsnotify",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:06:52-0600"
+    },
+    {
+        "key": "github.com/go-redis/redis",
+        "license-abbreviation": "BSD 2-Clause \"Simplified\" License",
+        "license-url": "https://api.github.com/licenses/bsd-2-clause",
+        "time": "2019-10-31T16:06:53-0600"
+    },
+    {
+        "key": "github.com/go-sql-driver/mysql",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-10-31T16:06:53-0600"
+    },
+    {
+        "key": "github.com/golang/protobuf",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:06:55-0600"
+    },
+    {
+        "key": "github.com/google/go-cmp",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:06:56-0600"
+    },
+    {
+        "key": "github.com/gorilla/context",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:06:56-0600"
+    },
+    {
+        "key": "github.com/gorilla/mux",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:09:21-0600"
+    },
+    {
+        "key": "github.com/hashicorp/consul",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-10-31T16:09:22-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-cleanhttp",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-10-31T16:09:23-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-rootcerts",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-10-31T16:09:24-0600"
+    },
+    {
+        "key": "github.com/hashicorp/serf",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-10-31T16:09:24-0600"
+    },
+    {
+        "key": "github.com/kr/pty",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:09:26-0600"
+    },
+    {
+        "key": "github.com/kr/text",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:34-0600"
+    },
+    {
+        "key": "github.com/mitchellh/go-homedir",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:36-0600"
+    },
+    {
+        "key": "github.com/mitchellh/mapstructure",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:36-0600"
+    },
+    {
+        "key": "github.com/morikuni/aec",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:37-0600"
+    },
+    {
+        "key": "github.com/onsi/ginkgo",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:38-0600"
+    },
+    {
+        "key": "github.com/onsi/gomega",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:11:38-0600"
+    },
+    {
+        "key": "github.com/opencontainers/image-spec",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:12:59-0600"
+    },
+    {
+        "key": "github.com/opencontainers/runc",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:13:00-0600"
+    },
+    {
+        "key": "github.com/pkg/errors",
+        "license-abbreviation": "BSD 2-Clause \"Simplified\" License",
+        "license-url": "https://api.github.com/licenses/bsd-2-clause",
+        "time": "2019-10-31T16:13:01-0600"
+    },
+    {
+        "key": "github.com/satori/go.uuid",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:13:02-0600"
+    },
+    {
+        "key": "github.com/sirupsen/logrus",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:13:03-0600"
+    },
+    {
+        "key": "github.com/spf13/afero",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-10-31T16:13:04-0600"
+    },
+    {
+        "key": "github.com/spf13/pflag",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-10-31T16:15:44-0600"
+    },
+    {
+        "key": "github.com/gogo/protobuf",
+        "license-abbreviation": "Go License",
+        "license-url": "https://github.com/gogo/protobuf/blob/master/LICENSE"
+    },
+    {
+        "key": "github.com/hpcloud/tail",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit"
+    },
+    {
+        "key": "github.com/magiconair/properties",
+        "license-abbreviation": "Manually Accepted",
+        "license-url": "https://github.com/magiconair/properties/blob/master/LICENSE"
+    },
+    {
+        "key": "github.com/opencontainers/go-digest",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://github.com/opencontainers/go-digest/blob/master/LICENSE"
+    },
+    {
+        "key": "github.com/pmezard/go-difflib",
+        "license-abbreviation": "Manually Accepted",
+        "license-url": "https://github.com/pmezard/go-difflib/blob/master/LICENSE"
+    },
+    {
+        "key": "github.com/stretchr/objx",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:28:22-0600"
+    },
+    {
+        "key": "github.com/stretchr/testify",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:28:22-0600"
+    },
+    {
+        "key": "github.com/testcontainers/testcontainers-go",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-10-31T16:28:23-0600"
+    },
+    {
+        "key": "github.com/armon/circbuf",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:40-0600"
+    },
+    {
+        "key": "github.com/armon/go-metrics",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:41-0600"
+    },
+    {
+        "key": "github.com/armon/go-radix",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:41-0600"
+    },
+    {
+        "key": "github.com/fatih/color",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:43-0600"
+    },
+    {
+        "key": "github.com/google/btree",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T09:04:44-0600"
+    },
+    {
+        "key": "github.com/hashicorp/errwrap",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:45-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-immutable-radix",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:46-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-msgpack",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-11-01T09:04:46-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-multierror",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:47-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-sockaddr",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:48-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-syslog",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:49-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go-uuid",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:50-0600"
+    },
+    {
+        "key": "github.com/hashicorp/golang-lru",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:51-0600"
+    },
+    {
+        "key": "github.com/hashicorp/logutils",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:52-0600"
+    },
+    {
+        "key": "github.com/hashicorp/mdns",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:53-0600"
+    },
+    {
+        "key": "github.com/hashicorp/memberlist",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:54-0600"
+    },
+    {
+        "key": "github.com/mattn/go-colorable",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:55-0600"
+    },
+    {
+        "key": "github.com/mattn/go-isatty",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:55-0600"
+    },
+    {
+        "key": "github.com/mitchellh/cli",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:57-0600"
+    },
+    {
+        "key": "github.com/mitchellh/gox",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/mitchellh/iochan",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/posener/complete",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:05:01-0600"
+    },
+    {
+        "key": "github.com/ryanuber/columnize",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:05:02-0600"
+    },
+    {
+        "key": "github.com/bgentry/speakeasy",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:05:02-0600"
+    },
+    {
+        "key": "github.com/hashicorp/consul/api",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/hashicorp/consul/sdk",
+        "license-abbreviation": "Mozilla Public License 2.0",
+        "license-url": "https://api.github.com/licenses/mpl-2.0",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/hashicorp/go.net",
+        "license-abbreviation": "Go License",
+        "license-url": "https://github.com/hashicorp/go.net/blob/master/LICENSE",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/miekg/dns",
+        "license-abbreviation": "Go License",
+        "license-url": "https://github.com/miekg/dns/blob/master/LICENSE",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/pascaldekloe/goe",
+        "license-abbreviation": "Manually Accepted",
+        "license-url": "https://github.com/pascaldekloe/goe/blob/master/LICENSE",
+        "time": "2019-11-01T09:04:59-0600"
+    },
+    {
+        "key": "github.com/sean-/seed",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:05:02-0600"
+    },
+    {
+        "key": "github.com/mitchellh/go-testing-interface",
+        "license-abbreviation": "MIT License",
+        "license-url": "https://api.github.com/licenses/mit",
+        "time": "2019-11-01T09:39:29-0600"
+    },
+    {
+        "key": "gotest.tools",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://github.com/gotestyourself/gotest.tools/blob/master/LICENSE",
+        "time": "2019-11-01T09:39:29-0600"
+    },
+    {
+        "key": "honnef.co/go/tools",
+        "license-abbreviation": "Manually Accepted",
+        "license-url": "https://github.com/dominikh/go-tools/blob/master/LICENSE",
+        "time": "2019-11-01T09:39:29-0600"
+    },
+    {
+        "key": "google.golang.org/appengine",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T10:09:40-0600"
+    },
+    {
+        "key": "google.golang.org/genproto",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T10:09:40-0600"
+    },
+    {
+        "key": "google.golang.org/grpc",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T10:09:40-0600"
+    },
+    {
+        "key": "cloud.google.com/go",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://github.com/googleapis/google-cloud-go/blob/master/LICENSE",
+        "time": "2019-11-01T10:09:40-0600"
+    }
+
+    ]
+}

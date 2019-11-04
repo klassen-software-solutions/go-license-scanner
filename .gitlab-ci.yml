@@ -1,9 +1,39 @@
-stages:
-  - test
-
-test:
-  stage: test
-  script:
-    - echo "Please replace me with something useful" ; false
+# A template job to reduce duplication in the specific deploy to <target> job instances
+.deploy_to:
+  image: docker-fts.rep01.frauscher.intern/frauscher-openjdk:11.0.1-jdk-slim-sid-3
+  stage: deploy
+  variables:
+    TARGET_REPOSITORY_ADDRESS: $NEXUS_DOCKER_SNAPSHOTS_HOST
+  before_script:
+    - docker login -u $NEXUS_USER -p $NEXUS_PWD $TARGET_REPOSITORY_ADDRESS
+    - source current-version.sh
+    - ./create-image.sh
   tags:
+    - docker
     - linux
+
+push-test-images-to-internal-repository:
+  extends: .deploy_to
+  script:
+    - docker tag
+        docker-fts.rep01.frauscher.intern/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+        $TARGET_REPOSITORY_ADDRESS/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG-testing
+    - docker push $TARGET_REPOSITORY_ADDRESS/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG-testing
+  except:
+    - master
+  environment:
+    name: testing
+
+push-release-images-to-internal-repository:
+  extends: .deploy_to
+  variables:
+    TARGET_REPOSITORY_ADDRESS: $NEXUS_DOCKER_SNAPSHOTS_HOST
+  script:
+    - docker tag
+        docker-fts.rep01.frauscher.intern/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+        $TARGET_REPOSITORY_ADDRESS/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+    - docker push $TARGET_REPOSITORY_ADDRESS/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+  only:
+    - master
+  environment:
+    name: staging
