@@ -1,0 +1,9 @@
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - echo "Please replace me with something useful" ; false
+  tags:
+    - linux
