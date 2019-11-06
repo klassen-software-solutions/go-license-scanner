@@ -138,6 +138,12 @@
         "time": "2019-10-31T16:06:55-0600"
     },
     {
+        "key": "github.com/golang/protobuf/proto",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://api.github.com/licenses/bsd-3-clause",
+        "time": "2019-11-07T15:24:14+0000"
+    },
+    {
         "key": "github.com/google/go-cmp",
         "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
         "license-url": "https://api.github.com/licenses/bsd-3-clause",
@@ -281,7 +287,7 @@
     {
         "key": "github.com/opencontainers/go-digest",
         "license-abbreviation": "Apache License 2.0",
-        "license-url": "https://github.com/opencontainers/go-digest/blob/master/LICENSE"
+        "license-url": "https://api.github.com/licenses/apache-2.0"
     },
     {
         "key": "github.com/pmezard/go-difflib",
@@ -495,7 +501,7 @@
     {
         "key": "gotest.tools",
         "license-abbreviation": "Apache License 2.0",
-        "license-url": "https://github.com/gotestyourself/gotest.tools/blob/master/LICENSE",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
         "time": "2019-11-01T09:39:29-0600"
     },
     {
@@ -523,10 +529,34 @@
         "time": "2019-11-01T10:09:40-0600"
     },
     {
+        "key": "google.golang.org/grpc/codes",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T10:09:40-0600"
+    },
+    {
+        "key": "google.golang.org/grpc/status",
+        "license-abbreviation": "Apache License 2.0",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
+        "time": "2019-11-01T10:09:40-0600"
+    },
+    {
         "key": "cloud.google.com/go",
         "license-abbreviation": "Apache License 2.0",
-        "license-url": "https://github.com/googleapis/google-cloud-go/blob/master/LICENSE",
+        "license-url": "https://api.github.com/licenses/apache-2.0",
         "time": "2019-11-01T10:09:40-0600"
+    },
+    {
+        "key": "github.com/DATA-DOG/godog",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://github.com/DATA-DOG/godog/blob/master/LICENSE",
+        "time": "2019-11-07T08:10:26-0700"
+    },
+    {
+        "key": "github.com/DATA-DOG/godog/colors",
+        "license-abbreviation": "BSD 3-Clause \"New\" or \"Revised\" License",
+        "license-url": "https://github.com/DATA-DOG/godog/blob/master/LICENSE",
+        "time": "2019-11-07T08:10:26-0700"
     }
 
     ]

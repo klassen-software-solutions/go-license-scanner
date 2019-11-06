@@ -9,9 +9,10 @@ SHELL ["/bin/bash", "-c"]
 LABEL com.frauscher.vendor="Frauscher Sensortechnik GmbH ©2019"
 
 WORKDIR /opt
-COPY license_scanner.py /opt/Frauscher/bin/license_scanner.py
+COPY *.py /opt/Frauscher/bin/
 COPY known_licenses.json /opt/Frauscher/etc/known_licenses.json
 
 ENV PATH /opt/Frauscher/bin:$PATH
 
-WORKDIR /
+WORKDIR /work
+CMD license_scanner.py --report
