@@ -14,8 +14,16 @@ like the following will work:
 
 ```
 docker run -v`pwd`:/work docker-fts.rep01.frauscher.intern/license-check:999999 \
-    license_scanner.py --verbose --report \
+    license_scanner.py --verbose --json \
     > t.json
+```
+
+Or, if you wish to obtain a PDF report, the following will write myreport.pdf into the directory mapped
+to /work.
+
+```
+docker run -v`pwd`:/work docker-fts.rep01.frauscher.intern/license-check:999999 \
+license_scanner.py --verbose --pdf myreport.pdf
 ```
 
 (Of course you need to replace the 999999 with the most recent version of the docker image.)

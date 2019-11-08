@@ -17,9 +17,6 @@ URL_COLUMN = 2
 _KNOWN_LICENSES_FILENAME = "/opt/Frauscher/etc/known_licenses.json"
 _NUMBER_OF_URL_PATH_SEGMENTS_FOR_GITHUB_API = 3
 
-_GOPKG_LICENSE = ("GoPkg License",
-                  "https://github.com/niemeyer/gopkg/blob/master/LICENSE",
-                  "found")
 
 class Scanner:
     """Class to scan dependancies in a list to determine their licenses."""
@@ -27,6 +24,7 @@ class Scanner:
     def __init__(self, dependancies: List[str]):
         self.dependancies = dependancies
         self.licenses = []
+        self._new_licenses = []
         self._load_known_licenses()
 
 
@@ -39,19 +37,24 @@ class Scanner:
         self.licenses = []
         for dep in self.dependancies:
             lic = self._license_for_dependancy(dep)
-            self.licenses.append((dep, lic[0], lic[1]))
+            abbr = lic[0]
+            url = lic[1]
+            cached = lic[2]
+            encoded = lic[3]
+            valid = self._is_valid_license(abbr)
+            self.licenses.append((dep, abbr, url, valid, encoded))
 
-            if lic[2] is None:
+            if cached is None:
                 entry = {
                     "key": dep,
-                    "license-abbreviation": lic[0],
-                    "license-url": lic[1],
+                    "license-abbreviation": abbr,
+                    "license-url": url,
+                    "license-base64": encoded,
                     "time": Scanner._secs_to_time_string(time.time())
                 }
-                print("  New entry:", file=sys.stderr)
-                print(json.dumps(entry, indent=4), file=sys.stderr)
+                self._new_licenses.append(entry)
             else:
-                logging.debug("  (%s) %s: %s", lic[2], dep, lic[0])
+                logging.debug("  (%s) %s: %s", cached, dep, abbr)
 
 
     def count_invalid_licenses(self) -> int:
@@ -62,13 +65,26 @@ class Scanner:
         for lic in self.licenses:
             dep = lic[DEPENDANCY_COLUMN]
             abbr = lic[LICENSE_ABBREVIATION_COLUMN]
-            if abbr == "<unknown>":
-                logging.error("  unknown license for %s", dep)
-                count += 1
-            elif not abbr in self.acceptable_licenses:
-                logging.error("  unacceptable license for %s: %s", dep, abbr)
+            if not _is_valid_license(abgr):
+                logging.error("  unknown or unacceptable license for %s: %s", dep, abbr)
                 count += 1
         return count
+
+
+    def print_new_licenses(self):
+        """Writes a JSON describing any new licenses to the standard error device.
+        """
+        if len(self._new_licenses) > 0:
+            print("New licenses entries:", file=sys.stderr)
+            print(json.dumps(self._new_licenses, indent=4), file=sys.stderr)
+
+
+    def _is_valid_license(self, abbr: str) -> bool:
+        if abbr == "<unknown>":
+            return False
+        elif not abbr in self.acceptable_licenses:
+            return False
+        return True
 
 
     def _load_known_licenses(self):
@@ -80,8 +96,15 @@ class Scanner:
                 for lic in data["resolved-licenses"]:
                     key = lic["key"]
                     abbrev = lic["license-abbreviation"]
-                    lic_url = lic["license-url"]
-                    self.known_licenses[key] = (abbrev, lic_url, "cached")
+
+                    lic_url = None
+                    if "license-url" in lic:
+                        lic_url = lic["license-url"]
+
+                    encoded = None
+                    if "license-base64" in lic:
+                        encoded = lic["license-base64"]
+                    self.known_licenses[key] = (abbrev, lic_url, "cached", encoded)
 
                 for lic in data["acceptable-license-types"]:
                     self.acceptable_licenses.add(lic)
@@ -93,10 +116,8 @@ class Scanner:
         host = dep.split("/")[0]
         if host == "github.com":
             return Scanner._license_for_github(dep)
-        if host == "gopkg.in":
-            return _GOPKG_LICENSE
 
-        return ("<unknown>", "", "invalid")
+        return ("<unknown>", None, "invalid", None)
 
     @staticmethod
     def _license_for_github(dep):
@@ -121,13 +142,7 @@ class Scanner:
             return ("<unknown>", "", None)
 
         j = json.loads(resp.text)
-        return (j['license']['name'], j['license']['url'], None)
-
-    @staticmethod
-    def _license_for_gopkg():
-        return ("GoPkg License",
-                "https://github.com/niemeyer/gopkg/blob/master/LICENSE",
-                "found")
+        return (j['license']['name'], j['download_url'], None, j['content'])
 
     @staticmethod
     def _ensure_can_call_github():

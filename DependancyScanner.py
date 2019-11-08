@@ -46,7 +46,7 @@ def scan(directory: str) -> List[str]:
         ret = _dependancy_list_from_packages()
 
     os.chdir(cwd)
-    return ret
+    return _remove_inner_package_dependancies(ret)
 
 
 def _dependancy_list_from_modules() -> List[str]:
@@ -91,6 +91,25 @@ def _dependancy_list_from_packages() -> List[str]:
         logging.debug("      %s", dep)
         ret.append(dep)
     return ret
+
+
+def _remove_inner_package_dependancies(deps: List[str]) -> List[str]:
+    deps.sort()
+    unique_deps = []
+    for dep in deps:
+        if _is_already_covered_by(dep, unique_deps):
+            continue
+        unique_deps.append(dep)
+    return unique_deps
+
+
+def _is_already_covered_by(dep: str, deps: List[str]) -> bool:
+    for existing_dep in deps:
+        if dep.startswith(existing_dep):
+            logging.debug("    removing %s, already covered by %s", dep, existing_dep)
+            return True
+    return False
+
 
 def _should_be_ignored(dep: str) -> bool:
     for igdep in _IGNORED_DEPENDANCIES:
