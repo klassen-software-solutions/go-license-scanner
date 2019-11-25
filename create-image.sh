@@ -8,4 +8,5 @@ echo "  registry: ${DOCKER_REGISTRY}"
 echo "  name: ${DOCKER_IMAGE_NAME}"
 echo "  tag: ${DOCKER_IMAGE_TAG}"
 
+rm -rf dist/*.whl
 docker build -t "$DOCKER_REGISTRY/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" .

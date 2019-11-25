@@ -1,3 +1,20 @@
+stages:
+  - test
+  - deploy
+
+run-unit-tests:
+  image: python:3.8-buster
+  stage: test
+  except:
+    - master
+  script:
+    - python3 setup.py bdist_wheel
+    - pip3 install dist/*.whl
+    - python3 -m unittest discover
+  tags:
+    - docker
+    - linux
+
 # A template job to reduce duplication in the specific deploy to <target> job instances
 .deploy_to:
   image: docker-fts.rep01.frauscher.intern/frauscher-openjdk:11.0.1-jdk-slim-sid-3

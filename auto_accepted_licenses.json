@@ -1,0 +1,17 @@
+{
+    "acceptable-license-types": [
+        "Apache License 2.0",
+        "BSD 2-Clause \"Simplified\" License",
+        "BSD 3-Clause \"New\" or \"Revised\" License",
+        "Go Standard Library License",
+        "GoPkg License",
+        "ISC License",
+        "MIT License",
+        "Mozilla Public License 2.0"
+    ],
+    "unacceptable-license-types": [
+        "GNU General Public License family",
+        "GNU General Public License v2.0",
+        "GNU General Public License v3.0"
+    ]
+}
