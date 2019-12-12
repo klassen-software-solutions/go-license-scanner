@@ -17,28 +17,26 @@ class TestJsonFileLicenseCache(unittest.TestCase):
                                             license_name="license"))
 
         l = ch.read("my package name")
-        l.acceptable = True
+        l.license_url = "http://no.such.machine/"
         ch.write(l)
         self.assertEqual(ch.read("my package name"),
                          LicenseReportEntry(package="my package name",
                                             license_name="license",
-                                            acceptable=True))
+                                            license_url="http://no.such.machine/"))
 
     def test_file_write_and_restore(self):
         filename = _temp_filename()
         _setup_file(filename)
         ch = JsonFileLicenseCache(filename)
         self.assertIsNone(ch.read("not there"))
-        self.assertEqual(ch.read("one"),
-                         LicenseReportEntry(package="one", acceptable=True))
-        self.assertEqual(ch.read("two"),
-                         LicenseReportEntry(package="two", acceptable=False))
+        self.assertEqual(ch.read("one"), LicenseReportEntry(package="one"))
+        self.assertEqual(ch.read("two"), LicenseReportEntry(package="two"))
 
 
 def _setup_file(filename: str):
     ch = JsonFileLicenseCache(filename)
-    ch.write(LicenseReportEntry(package="one", acceptable=True))
-    ch.write(LicenseReportEntry(package="two", acceptable=False))
+    ch.write(LicenseReportEntry(package="one"))
+    ch.write(LicenseReportEntry(package="two"))
     ch.update_cache_file()
 
 def _temp_filename() -> str:

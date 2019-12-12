@@ -1,50 +1,27 @@
 # license-check
 
-## Updating the license cache for a project
+## Generating a license report for a Go project
 
-When the CI fails telling you that there are unknown or unacceptable licenses, you will need to
-either change the code to use acceptable license, or assuming that the licenses are acceptable
-and just need the correct record kept, you can update the local `license_cache.json` file
-for the project.
+Presently this license checker only handles Go projects that conform to the relatively new 
+go module structure. Specifically it is relying on the go module reporting facility in order to
+obtain the list of dependancies to examine.
 
-Assuming the latter, the easiest way is to run the license check locally on your development environment.
-This will add any new dependancies to the cache file which you can then checkin and push. (Of course 
-you need to replace 999999 with the latest version of the license checker docker.)
+To run the report, all you need is the latest version of the license-check docker image.
 
 ```
 docker run -v`pwd`:/work docker-fts.rep01.frauscher.intern/license-check:999999
 ```
 
-### Side note: running the script in the docker
+This will run the license check using a cache to be found in `resources/license_cache.json` and
+writing its output to a file `resources/licenses.json`. The cache file is needed since we use the
+GitHub API in order to obtain the license information for any GitHub based dependancies (which is most
+of them for Go projects) and we are limited to a maximum of 60 API hits/hour. The cache file will be
+automatically created if it does not already exist, but should be checked into git whenever running this
+changes it in order to ensure that we do not need to rebuild the cache each time.
 
-The docker has been created with an `ENTRYPOINT` setting allowing for you to add additional
-command line arguments without having to respecify everything. Hence you can, for example,
-simply add `--verbose` to the above command without having to specify the entire command.
-The docker is configured to run the following command:
+## Generating a PDF report
 
-```
-run_scanner.py \
-    --cache=./license_cache.json \
-    --auto-accept=/opt/Frauscher/etc/auto_accepted_licenses.json
-```
-
-so if you wish to change the cache or auto-accept files you will need to set the entrypoint to be
-empty and then run the full command manually. You can obtain the full command line options
-by adding the `--help` option.
-
-## Generating a report
-
-The license checker will also allow you to generate a report of all the licenses for your project
-either in a JSON or PDF format.
-
-To generate the JSON to a file, the following will write myreport.json into the directory mapped to /work.
-
-```
-docker run -v`pwd`:/work docker-fts.rep01.frauscher.intern/license-check:999999 \
-    --json=myreport.json
-```
-
-Or, if you wish to obtain a PDF report, the following will write myreport.pdf into the directory mapped
+If you wish to obtain a PDF report, the following will write myreport.pdf into the directory mapped
 to /work.
 
 ```
@@ -57,7 +34,9 @@ docker run -v`pwd`:/work docker-fts.rep01.frauscher.intern/license-check:999999 
 To turn on the scanning you need to add an appropriate section to your git lab configuration. First,
 add an appropriate stage, called `licensecheck` to the stages. Next, add the following to turn it on.
 Note the use of the `entrypoint` item. This is needed to ensure the CI can run the docker with a
-shell rather than running the script automatically.
+shell rather than running the script automatically. However at present we have removed this from
+our current projects as it has been decided not to make the license check a go/no-go decision in
+the CI.
 
 ```
 run license check:
@@ -74,8 +53,8 @@ run license check:
     - run_scanner.py
           --verbose 
           --error-on-invalid 
-          --cache=./license_cache.json 
-          --auto-accept=/opt/Frauscher/etc/auto_accepted_licenses.json
+          --cache=resources/license-cache.json 
+          --auto-accept=resources/allowed-licenses.json
 ```
 
 ## Understanding the license scanner results
@@ -93,98 +72,49 @@ examination.
 
 ## The known licenses cache file
 
-This file is used for the following purposes:
-
-1. To act as a cache so we don't run out of github API calls (we are only allowed 60/hour), and
-2. to handle the licenses cases that we cannot automatically determine.
+This file is used as a cache so we don't run out of GitHub API calls (we are only allowed 60/hour).
+It can also be used to handle license cases that we cannot automatically determine, by manually
+creating/editing an entry in this file, however that is not recommended. For the most part you should
+leave this file alone, but checkin any changes that running the license scan makes.
 
 The filename is specified using the `--cache=<filename>` command line option.
 
-Each entry consists of the following:
-
-* package: This is the dependancy being checked,
-* license_name: A short form of the license (e.g. 'MIT License'),
-* license_url: The URL describing the full license,
-* license_encoded: The full license text, encoded in base64 encoding. Note that you can leave this out and
-it will be automatically added, the next time the license_url is read.
-* license_recognized_at: The time we last read the license.
-* acceptable: If true, the license is accepted, if false the license is rejected, if null then it is not yet
-accepted or rejected (i.e. it's state is unknown). For a manually accepted or rejected license you
-can set this. If null the script will attempt to set it automatically.
-* ..._name: These fields contain the  name of the component that was used when determining
-the license details. It is primarily for debugging purposes and is currently never read. For manually
-accepting or rejecting a license you may want to set 'acceptor_name' to 'Manual' or perhaps to
-the name of the person who accepted/rejected it, just to make it clear.
-
-The timestamp is not currently used by the script, but is added in case we want to add a 
-timeout on our license check. For example, perhaps we want to  recheck all licenses once 
-per year so see if they have changed. If so the scanning script could be modified to make
-use of that information.
-
-Here is a short example:
-
-```
-{
-    "resolved-licenses": [
-        {
-            "package": "github.com/Azure/go-ansiterm",
-            "license_name": "MIT License",
-            "license_url": "https://raw.githubusercontent.com/Azure/go-ansiterm/master/LICENSE",
-            "license_encoded": ...,
-            "license_recognized_at": "2019-11-29T08:20:36-0700",
-            "acceptable": true,
-            "dependancy_scanner_name": "GoModuleDependancyScanner",
-            "license_recognizer_name": "GitHubRecognizer",
-            "acceptor_name": "JsonFileLicenseAcceptor"
-        },
-        {
-            "package": "github.com/Flaque/filet",
-            "license_name": "Apache License 2.0",
-            "license_url": "https://raw.githubusercontent.com/Flaque/filet/master/LICENSE.txt",
-            "license_encoded": ...,
-            "license_recognized_at": "2019-11-29T08:20:36-0700",
-            "acceptable": true,
-            "dependancy_scanner_name": "GoModuleDependancyScanner",
-            "license_recognizer_name": "GitHubRecognizer",
-            "acceptor_name": "JsonFileLicenseAcceptor"
-        }
-    ]
-}
-```
-
+We don't describe this file in any more detail as we really don't want it to be manually tweaked. It
+should really only be used for caching and perhaps for debugging purposes.
 
 ## The acceptable licenses file
 
 Determining which licenses we automatically consider acceptable is handled by the acceptable licenses file.
-It is simply a list of the "license_name" values that we consider acceptable or non-acceptable. For example,
-if we start using a GPL library, the github check will list it as such and report it, but since it is not in
-our list of acceptable licenses, our script will report that appropriately. Most of the values here are 
-exactly what is returned by the github API calls, but a few (like "GoPkg License") are custom values we 
-have created to identify licenses that are not automatically handled by the github API.
+Any license requests that do not match this file are considered not acceptable. 
+
+The format of the file is described in more detail in https://github.com/jk1/Gradle-License-Report. Note,
+however, that we do not support the `moduleVersion` item mentioned in that project since we are
+not presently tracking the module versions in our license scanner.
 
 The file itself is specified using the `--auto-accept=<filename>` command line parameter.
 
-Here is a short example showing both acceptable and non-acceptable licenses.
+Here is a short example. In this example the Apache license would be acceptable by any of our
+packages while the MIT license would be acceptable only for projects from `github.com/myorg/` or
+from projects `project1` and `project2` of `github.com/anotherorg/`.
 
 ```
 {
-    "acceptable-license-types": [
-        "Apache License 2.0",
-        "BSD 2-Clause \"Simplified\" License",
-        "BSD 3-Clause \"New\" or \"Revised\" License",
-        "Go Standard Library License",
-        "ISC License",
-        "MIT License",
-        "Mozilla Public License 2.0"
-    ],
-    "unacceptable-license-types": [
-        "GNU General Public License family",
-        "GNU General Public License v2.0",
-        "GNU General Public License v3.0"
-    ]
+  "allowedLicenses": [
+    {
+      "moduleLicense": "Apache License 2.0",
+    },
+    {
+      "moduleLicense": "MIT License",
+      "moduleName": "github.com/myorg/*",
+    },
+    {
+      "moduleLicense": "MIT License",
+      "moduleName": "github.com/anotherorg/project1"
+    },
+    {
+      "moduleLicense": "MIT License",
+      "moduleName": "github.com/anotherorg/project2"
+    }
+  ]
 }
 ```
-
-Note that this only accepts/rejects licenses that have not already been accepted or rejected (i.e.
-where "acceptable" is set to null). Once a license has been accepted or rejected, either automatically
-or manually, it will not be changed by the auto acceptance code.

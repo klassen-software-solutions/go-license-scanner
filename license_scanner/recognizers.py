@@ -11,7 +11,6 @@ import json
 import logging
 import time
 
-from operator import attrgetter
 from typing import Dict, List
 
 import requests

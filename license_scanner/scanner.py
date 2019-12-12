@@ -6,7 +6,6 @@ import argparse
 import json
 import logging
 import os
-import pathlib
 import sys
 
 from typing import List
@@ -25,17 +24,20 @@ def scan(directory: str,
          dependancy_scanners: List[DependancyScanner],
          license_recognizers: List[Recognizer],
          license_acceptors: List[LicenseAcceptor] = None,
-         license_reporters: List[Reporter] = None) -> List[LicenseReportEntry]:
-    """Run a license scan on the given directory, using the given components."""
+         license_reporters: List[Reporter] = None) -> (List[LicenseReportEntry],
+                                                       List[LicenseReportEntry]):
+    """Run a license scan on the given directory, using the given components.
+       Returns a tuple with the list of all report entries and a list of report entries
+       whose licenses have not been accepted.
+    """
 
     logging.info("Checking licenses in %s", directory)
     entries = scan_all(directory, dependancy_scanners)
     recognize_all(entries, license_recognizers)
-    if license_acceptors is not None:
-        accept_all(entries, license_acceptors)
+    unaccepted_entries = accept_all(entries, license_acceptors)
     if license_reporters is not None:
-        report_all(entries, license_reporters)
-    return entries
+        report_all(entries, unaccepted_entries, license_reporters)
+    return (entries, unaccepted_entries)
 
 
 def main():
@@ -51,6 +53,8 @@ def main():
     parser.add_argument('--pdf', help='Generate a PDF license report in the given file')
     parser.add_argument('--cache', help='Name of JSON license cache file (auto-created)')
     parser.add_argument('--auto-accept', help='Name of JSON auto accept file')
+    parser.add_argument('--unaccepted-results',
+                        help='Name of JSON file created to hold unaccepted licenses.')
     parser.add_argument('--error-on-invalid',
                         action='store_true',
                         help='Exit with the number of unrecognized or unaccepted licenses.')
@@ -65,9 +69,13 @@ def main():
 
     acceptors = None
     if args.auto_accept:
-        with open(args.auto_accept) as json_file:
-            json_data = json.load(json_file)
-        acceptors = [JsonFileLicenseAcceptor(json_data, cache)]
+        try:
+            with open(args.auto_accept) as json_file:
+                json_data = json.load(json_file)
+            acceptors = [JsonFileLicenseAcceptor(json_data)]
+        except FileNotFoundError:
+            logging.warning('Could not find %s, auto-accept ignored', args.auto_accept)
+            acceptors = None
 
     reporters = []
     if args.json:
@@ -75,17 +83,27 @@ def main():
     if args.pdf:
         reporters.append(PdfReporter(args.pdf, cache))
 
-    entries = scan(directory=os.getcwd(),
-                   dependancy_scanners=_DEPENDANCY_SCANNERS,
-                   license_recognizers=_setup_recognizers(cache),
-                   license_acceptors=acceptors,
-                   license_reporters=reporters)
+    (entries, unaccepted_entries) = scan(directory=os.getcwd(),
+                                         dependancy_scanners=_DEPENDANCY_SCANNERS,
+                                         license_recognizers=_setup_recognizers(cache),
+                                         license_acceptors=acceptors,
+                                         license_reporters=reporters)
 
     if cache is not None:
         if cache.update_cache_file():
             logging.info("The cache file %s has been changed.", args.cache)
 
-    unaccepted_count = _display_results_and_get_unaccepted_count(entries)
+    logging.info("Total dependancies examined: %d", len(entries))
+    unaccepted_count = len(unaccepted_entries)
+    if unaccepted_count > 0:
+        logging.info("Number of unaccepted licenses: %d", unaccepted_count)
+        _write_unaccepted_licenses(args.unaccepted_results, unaccepted_entries)
+        for entry in unaccepted_entries:
+            if entry.license_name is None:
+                logging.info("  %s (** Unidentified **)", entry.package)
+            else:
+                logging.info("  %s (%s)", entry.package, entry.license_name)
+
     if args.error_on_invalid:
         sys.exit(unaccepted_count)
 
@@ -115,31 +133,12 @@ def _setup_recognizers(cache: LicenseCache) -> List[Recognizer]:
         CommonPrefixRecognizer("gopkg.in", "GoPkg License", go_pkg_license_url, cache)
     ]
 
-def _display_results_and_get_unaccepted_count(entries: List[LicenseReportEntry]) -> int:
-    unrecognized_count = 0
-    unaccepted_count = 0
-    for entry in entries:
-        if entry.license_name is None:
-            unrecognized_count += 1
-        if entry.acceptable is None or entry.acceptable is False:
-            unaccepted_count += 1
-
-    logging.info("Results...")
-    logging.info("Total dependancies examined: %d", len(entries))
-
-    if unrecognized_count > 0:
-        logging.info("Number of unrecognized licenses: %d", unrecognized_count)
-        for entry in entries:
-            if entry.license_name is None:
-                logging.info("  %s", entry.package)
-
-    if unaccepted_count > 0:
-        logging.info("Number of unaccepted licenses: %d", unaccepted_count)
-        for entry in entries:
-            if not entry.acceptable and entry.license_name is not None:
-                if entry.license_name is None:
-                    logging.info("  %s (Unidentified)", entry.package)
-                else:
-                    logging.info("  %s (%s)", entry.package, entry.license_name)
-
-    return unaccepted_count
+def _write_unaccepted_licenses(filename: str, unaccepted_entries: List[LicenseReportEntry]):
+    if filename:
+        logging.info("Writing unaccepted licenses to %s", filename)
+        deps = []
+        for entry in unaccepted_entries:
+            deps.append({"moduleLicense": entry.license_name, "moduleName": entry.package})
+        lics = {"dependenciesWithoutAllowedLicenses": deps}
+        with open(filename, 'w') as outfile:
+            json.dump(lics, outfile, indent=4)

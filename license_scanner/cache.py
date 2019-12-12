@@ -17,16 +17,13 @@ from dataclasses import dataclass
 class LicenseReportEntry:
     """Encapsulation of the information we need to include in a report.
     """
-    #pylint: disable=too-many-instance-attributes
     package: str = None
     license_name: str = None
     license_url: str = None
     license_encoded: str = None
     license_recognized_at: str = None
-    acceptable: bool = None
     dependancy_scanner_name: str = None
     license_recognizer_name: str = None
-    acceptor_name: str = None
 
     def __eq__(self, other):
         if isinstance(other, LicenseReportEntry):
@@ -35,10 +32,8 @@ class LicenseReportEntry:
                     self.license_url == other.license_url and
                     self.license_encoded == other.license_encoded and
                     self.license_recognized_at == other.license_recognized_at and
-                    self.acceptable == other.acceptable and
                     self.dependancy_scanner_name == other.dependancy_scanner_name and
-                    self.license_recognizer_name == other.license_recognizer_name and
-                    self.acceptor_name == other.acceptor_name)
+                    self.license_recognizer_name == other.license_recognizer_name)
         return False
 
 

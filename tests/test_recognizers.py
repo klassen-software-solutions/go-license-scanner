@@ -194,10 +194,8 @@ def _matches(a: LicenseReportEntry, b: LicenseReportEntry) -> bool:
            a.license_name == b.license_name and
            a.license_url == b.license_url and
            a.license_encoded == b.license_encoded and
-           a.acceptable == b.acceptable and
            a.dependancy_scanner_name == b.dependancy_scanner_name and
-           a.license_recognizer_name == b.license_recognizer_name and
-           a.acceptor_name == b.acceptor_name)
+           a.license_recognizer_name == b.license_recognizer_name)
     if not ret:
         print("mismatch: a=%s, b=%s" % (a, b))
     return ret

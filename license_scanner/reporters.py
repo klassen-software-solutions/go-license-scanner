@@ -7,7 +7,7 @@ import json
 import logging
 import sys
 
-from typing import List, Dict
+from typing import Dict, List, Set
 
 from fpdf import FPDF
 import requests
@@ -29,18 +29,19 @@ class Reporter(abc.ABC):
     """API for generating a report file."""
 
     @abc.abstractmethod
-    def generate_report(self, entries: List[LicenseReportEntry]):
+    def generate_report(self, entries: List[LicenseReportEntry], unaccepted_packages: Set[str]):
         """Subclasses must override this to actually generate the report."""
 
-    @classmethod
-    def generate_summary(cls, entries: List[LicenseReportEntry]) -> Dict:
+    def generate_summary(self,
+                         entries: List[LicenseReportEntry],
+                         unaccepted_packages: Set[str]) -> Dict:
         """Subclasses may use this to generate a summary of the entries by license name."""
         summary = {}
         for entry in entries:
             name = entry.license_name if entry.license_name is not None else "Other"
-            if not entry.acceptable:
+            if entry.package in unaccepted_packages:
                 name = "** Unacceptable **"
-            cls._increment_counter(summary, name)
+            self._increment_counter(summary, name)
         return summary
 
     @classmethod
@@ -52,36 +53,37 @@ class Reporter(abc.ABC):
 
 
 class JsonReporter(Reporter):
-    """Reporter that will create a JSON file."""
+    """Reporter that will create a JSON file.
+       Note that the output format will be as the one described for Consul-License-Report
+       module.
+    """
 
     def __init__(self, filename: str):
         self.filename = filename
 
-    def generate_report(self, entries: List[LicenseReportEntry]):
+    def generate_report(self, entries: List[LicenseReportEntry], unaccepted_packages: Set[str]):
         """Generate a JSON report to the given file."""
         if self.filename == '-':
             logging.info("producing JSON report on the standard output device")
         else:
             logging.info("producing JSON report as '%s'", self.filename)
         rep = {
-            'summary': self.generate_summary(entries),
-            'licenses': self._generate_licenses(entries)
+            'dependencies': self._generate_licenses(entries)
         }
         if self.filename == '-':
-            json.dump(rep, sys.stdout, indent=4)
+            json.dump(rep, sys.stdout, indent=4, sort_keys=True)
         else:
             with open(self.filename, 'w') as outfile:
-                json.dump(rep, outfile, indent=4)
+                json.dump(rep, outfile, indent=4, sort_keys=True)
 
     @classmethod
     def _generate_licenses(cls, entries: List[LicenseReportEntry]):
         licenses = []
         for entry in entries:
             licenses.append({
-                'package': entry.package,
-                'license_name': entry.license_name,
-                'license_url': entry.license_url,
-                'acceptable': entry.acceptable
+                'moduleName': entry.package,
+                'moduleLicense': entry.license_name,
+                'moduleLicenseUrl': entry.license_url
             })
         return licenses
 
@@ -93,16 +95,19 @@ class PdfReporter(Reporter):
         self.filename = filename
         self.cache = cache
 
-    def generate_report(self, entries: List[LicenseReportEntry]):
+    def generate_report(self, entries: List[LicenseReportEntry], unaccepted_packages: Set[str]):
         """Generate a PDF report in the given filename."""
         logging.info("producing PDF report as '%s'", self.filename)
         pdf = FPDF()
-        self._create_summary_page(pdf, entries)
+        self._create_summary_page(pdf, entries, unaccepted_packages)
         for entry in entries:
-            self._create_license_page(pdf, entry)
+            self._create_license_page(pdf, entry, unaccepted_packages)
         pdf.output(self.filename)
 
-    def _create_summary_page(self, pdf: FPDF, entries: List[LicenseReportEntry]):
+    def _create_summary_page(self,
+                             pdf: FPDF,
+                             entries: List[LicenseReportEntry],
+                             unaccepted_packages: Set[str]):
         logging.debug("  generating summary page")
         pdf.add_page()
         pdf.set_font(_FONT)
@@ -114,14 +119,17 @@ class PdfReporter(Reporter):
         pdf.cell(0, _LINE_SIZE_MM, txt="Summary", ln=_NEXT_LINE)
         pdf.ln()
 
-        summary = self.generate_summary(entries)
+        summary = self.generate_summary(entries, unaccepted_packages)
         for key in sorted(summary):
             pdf.cell(_INDENT_MM, _LINE_SIZE_MM)
             pdf.cell(_LICENSE_COLUMN_WIDTH_MM, _LINE_SIZE_MM, txt=key)
             pdf.cell(0, _LINE_SIZE_MM, txt="%d" % summary[key])
             pdf.ln()
 
-    def _create_license_page(self, pdf: FPDF, entry: LicenseReportEntry):
+    def _create_license_page(self,
+                             pdf: FPDF,
+                             entry: LicenseReportEntry,
+                             unaccepted_packages: Set[str]):
         logging.debug("  generating page for %s", entry.package)
         pdf.add_page()
         pdf.set_font(_FONT)
@@ -129,7 +137,7 @@ class PdfReporter(Reporter):
         pdf.cell(0, _LINE_SIZE_MM, txt="Package: %s" % entry.package, ln=_NEXT_LINE)
 
         license_type_line = "License Type: %s" % entry.license_name
-        if not entry.acceptable:
+        if entry.package in unaccepted_packages:
             license_type_line += " (** Unacceptable **)"
         pdf.cell(0, _LINE_SIZE_MM, txt=license_type_line, ln=_NEXT_LINE)
 
@@ -186,8 +194,13 @@ class PdfReporter(Reporter):
         return resp.status_code >= 200 and resp.status_code < 300
 
 
-def report_all(entries: List[LicenseReportEntry], reporters: List[Reporter]):
+def report_all(entries: List[LicenseReportEntry],
+               unaccepted_entries: List[LicenseReportEntry],
+               reporters: List[Reporter]):
     """Generate the reports for the given list of reporters."""
     logging.info("Generating %d reports on %d entries", len(reporters), len(entries))
+    unaccepted_packages = set()
+    for entry in unaccepted_entries:
+        unaccepted_packages.add(entry.package)
     for reporter in reporters:
-        reporter.generate_report(entries)
+        reporter.generate_report(entries, unaccepted_packages)
