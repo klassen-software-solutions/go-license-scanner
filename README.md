@@ -1,5 +1,12 @@
 # license-check
 
+## NOTICE
+
+This project is a fork of a project created by Frauscher Sensonic GmbH. It has been forked and
+its license changed to an MIT license with their permission. The intended purpose is to move the
+functionality of this project into the more general `LicenseScanner` project and to continue
+maintaining it from that point.
+
 ## Generating a license report for a Go project
 
 Presently this license checker only handles Go projects that conform to the relatively new 
